@@ -1,11 +1,10 @@
-import 'package:aldabot/const.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -13,9 +12,9 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final ChatUser _currentUser =
-      ChatUser(id: '1', firstName: "Chi", lastName: "Bui Mai");
+      ChatUser(id: "1", firstName: "minh", lastName: "trantuan");
   final ChatUser _aldaChatBot =
-      ChatUser(id: '2', firstName: "ALDA", lastName: "Chat");
+      ChatUser(id: "2", firstName: "ALDA", lastName: "Chat");
 
   List<ChatMessage> _messages = <ChatMessage>[];
 
@@ -23,7 +22,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(0, 166, 126, 1),
+        backgroundColor: Color.fromARGB(255, 29, 186, 234),
         title: const Text(
           'ALDA Chat',
           style: TextStyle(
@@ -32,47 +31,55 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       body: DashChat(
-          currentUser: _currentUser,
-          messageOptions: const MessageOptions(
-              currentUserContainerColor: Color.fromRGBO(0, 166, 126, 1)),
-          onSend: (ChatMessage m) {
-            getChatResponse(m);
-          },
-          messages: _messages),
+        currentUser: _currentUser,
+        messages: _messages,
+        onSend: _handleSendMessage,
+      ),
     );
   }
 
-  Future<void> getChatResponse(ChatMessage m) async {
+  Future<void> _handleSendMessage(ChatMessage message) async {
     setState(() {
-      _messages.insert(0, m);
-      print(m.text);
+      _messages.insert(0, message);
     });
-    final apiKey = CHAT_BOT_KEY;
-    final chatBotID = 155900;
-    final message = m.text;
-    final externalID = _currentUser.id;
-    final firstName = _currentUser.firstName;
-    final lastName = _currentUser.lastName;
 
-    final response = await http
-        .get(Uri.parse('https://www.personalityforge.com/api/chat/index.php'
-            '?apiKey=$apiKey&chatBotID=$chatBotID&message=$message'
-            '&externalID=$externalID&firstName=$firstName&lastName=$lastName'));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      String botReply = 'Failed to response from ALDA bot';
-      // Check if the API call was successful
-      if (data['success'] == 1) {
-        botReply = data['message']['message'];
+    final url = 'http://203.162.88.102:12001/chat/';
+    final data = {
+      "id_user": 1,
+      "id_section": 2,
+      "query": message.text,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(utf8.decode(response.bodyBytes));
+        String botReply = 'Failed to get response from ALDA bot';
+        print(responseData);
+        if (responseData['response'] != null) {
+          botReply = responseData['response'];
+        }
+        setState(() {
+          final botMessage = ChatMessage(
+            user: _aldaChatBot,
+            text: botReply,
+            createdAt: DateTime.now(),
+          );
+          _messages.insert(0, botMessage);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        print('Response body: ${response.body}');
       }
-      setState(() {
-        _messages.insert(
-            0,
-            ChatMessage(
-                user: _aldaChatBot, createdAt: DateTime.now(), text: botReply));
-      });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }

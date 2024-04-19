@@ -21,6 +21,10 @@
   <key>CFBundleVersion</key>
   <string>1.0</string>
   <key>MinimumOSVersion</key>
-  <string>11.0</string>
+  <string>12.0</string>
+  <key>NSSpeechRecognitionUsageDescription</key> <!-- Thêm vào -->
+  <string>$(PRODUCT_NAME) uses Speech Recognition</string> <!-- Thêm vào -->
+  <key>NSMicrophoneUsageDescription</key> <!-- Thêm vào -->
+  <string>$(PRODUCT_NAME) uses Microphone</string> <!-- Thêm vào -->
 </dict>
 </plist>
