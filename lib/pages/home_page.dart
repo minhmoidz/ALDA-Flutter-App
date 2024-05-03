@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:aldabot/pages/chat_page.dart';
 import 'package:aldabot/pages/voice_page.dart';
-import 'package:aldabot/pages/home_page.dart'; // Import trang HomePage
+//import 'package:aldabot/pages/home_page.dart'; // Import trang HomePage
 
 void main() {
   runApp(LoginApp());
@@ -17,8 +17,8 @@ class LoginApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: TextTheme(
-          subtitle1: TextStyle(color: Colors.white),
-        ),
+            //subtitle1: TextStyle(color: Colors.white),
+            ),
       ),
       home: LoginPage(),
     );
