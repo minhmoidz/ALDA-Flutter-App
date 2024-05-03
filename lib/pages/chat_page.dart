@@ -12,9 +12,9 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final ChatUser _currentUser =
-      ChatUser(id: "1", firstName: "minh", lastName: "trantuan");
+  ChatUser(id: "1", firstName: "minh", lastName: "trantuan");
   final ChatUser _aldaChatBot =
-      ChatUser(id: "2", firstName: "ALDA", lastName: "Chat");
+  ChatUser(id: "2", firstName: "ALDA", lastName: "Chat");
 
   List<ChatMessage> _messages = <ChatMessage>[];
 

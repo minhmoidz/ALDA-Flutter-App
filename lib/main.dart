@@ -1,4 +1,3 @@
-import 'package:aldabot/pages/chat_page.dart';
 import 'package:aldabot/pages/home_page.dart';
 import 'package:flutter/material.dart';
 

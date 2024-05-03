@@ -1,8 +1,3 @@
-import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:aldabot/pages/chat_page.dart';
@@ -22,8 +17,8 @@ class LoginApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: TextTheme(
-          //subtitle1: TextStyle(color: Colors.white),
-        ),
+            //subtitle1: TextStyle(color: Colors.white),
+            ),
       ),
       home: LoginPage(),
     );

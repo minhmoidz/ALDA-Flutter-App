@@ -3,7 +3,14 @@ import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:convert';
+
+void main() {
+  runApp(MaterialApp(
+    home: VoicePage(),
+  ));
+}
 
 class VoicePage extends StatefulWidget {
   const VoicePage({Key? key}) : super(key: key);
@@ -14,8 +21,22 @@ class VoicePage extends StatefulWidget {
 
 class _VoicePageState extends State<VoicePage> {
   final stt.SpeechToText _speech = stt.SpeechToText();
+  final FlutterTts flutterTts = FlutterTts();
   bool _isRecording = false;
   String _text = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeSpeechToText();
+  }
+
+  void _initializeSpeechToText() async {
+    bool isAvailable = await _speech.initialize();
+    if (!isAvailable) {
+      // Xử lý khi Speech to text không khả dụng
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +108,7 @@ class _VoicePageState extends State<VoicePage> {
 
       _speech.listen(onResult: (SpeechRecognitionResult result) {
         setState(() {
-          _text = result.recognizedWords;
+          _text = result.recognizedWords ?? '';
         });
       });
     }
@@ -135,6 +156,8 @@ class _VoicePageState extends State<VoicePage> {
           setState(() {
             _text = botReply;
           });
+          // Đọc văn bản khi nhận được phản hồi
+          await flutterTts.speak(botReply);
         } else {
           print('Request failed with status: ${response.statusCode}.');
           print('Response body: ${response.body}');
