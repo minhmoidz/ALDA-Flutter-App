@@ -60,7 +60,7 @@ class _ChatPageState extends State<ChatPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'ALDA Chat',
+                  'Nhắn tin cùng Gió',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

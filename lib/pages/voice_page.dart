@@ -9,7 +9,6 @@ import 'dart:typed_data'; // Thêm import cho Uint8List
 import 'dart:ui' show ImageByteFormat; // Cho việc chuyển đổi image
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'dart:async';
 
 void main() async {
@@ -256,7 +255,7 @@ class _VoicePageState extends State<VoicePage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 36, 185, 138),
         title: const Text(
-          'ALDA Voice & Video',
+          'Trò truyện cùng Gió',
           style: TextStyle(
             color: Colors.white,
           ),
