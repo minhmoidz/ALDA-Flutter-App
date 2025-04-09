@@ -1,426 +1,352 @@
-import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:aldabot/pages/chat_page.dart';
 import 'package:aldabot/pages/voice_page.dart';
-//import 'package:aldabot/pages/home_page.dart'; // Import trang HomePage
-
-void main() {
-  runApp(LoginApp());
-}
-
-class LoginApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(
-          //subtitle1: TextStyle(color: Colors.white),
-        ),
-      ),
-      home: LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  void _login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-
-    // Kiểm tra tên đăng nhập và mật khẩu cố định
-    if (username == 'hung123' && password == '12345') {
-      print('Đăng nhập thành công!');
-      // Thực hiện hành động khi đăng nhập thành công, chuyển đến trang chính của ứng dụng
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      print('Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.');
-      // Hiển thị thông báo lỗi cho người dùng
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                child: Image.asset(
-                  'images/icon.png',
-                  width: 205,
-                  height: 205,
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _usernameController,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.person, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _passwordController,
-                  style: TextStyle(color: Colors.black),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.lock, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  //primary : Colors.blue, // Màu nút khi không kích hoạt
-                  elevation: 15, // Độ nổi của nút
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 48.0),
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 57, 123, 166),
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Hành động khi nhấn vào tạo tài khoản
-                    },
-                    child: Text(
-                      'Create Account',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    ' | ',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Hành động khi nhấn vào quên mật khẩu
-                    },
-                    child: Text(
-                      'Forgot Password',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+import 'main.dart';
 
 class HomePage extends StatelessWidget {
-  final double horizontalPadding = 20;
-  final double verticalPadding = 40;
-  final double heightSizeBox = 20;
-
-  final List<List<dynamic>> aldaTasks = [
-    [
-      "Chatting",
-      MfgLabs.comment,
-      Color.fromARGB(255, 133, 177, 213),
-    ],
-    [
-      "Talking",
-      MfgLabs.mic,
-      Color.fromARGB(255, 102, 162, 104),
-    ],
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // App Bar with settings
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding, vertical: verticalPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.logout), // Biểu tượng nút thoát
-                    onPressed: () {
-                      // Xử lý sự kiện khi nút được nhấn
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                LoginPage()), // Điều hướng đến trang đăng nhập
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.settings), // Thay đổi icon thành settings
-                    onPressed: () {
-                      // Thực hiện hành động khi icon được nhấn
-                    },
-                  ),
+                  // Bạn có thể thêm các nút hoặc icon vào đây
                 ],
               ),
             ),
-            SizedBox(height: heightSizeBox),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Welcome back",
-                      style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                  Text("HUNG MANH",
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Roboto',
-                          color: Color.fromARGB(255, 101, 151, 170))),
-                ],
-              ),
-            ),
-            SizedBox(height: heightSizeBox),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Text("How can ALDA help you ?",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87)),
-            ),
-            SizedBox(height: 30),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 80,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: aldaTasks[0][2],
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          aldaTasks[0][1],
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          aldaTasks[0][0],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => VoicePage()),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 80,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: aldaTasks[1][2],
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          aldaTasks[1][1],
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          aldaTasks[1][0],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: heightSizeBox),
+
             Expanded(
-              child: Container(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Allow your voice to Heal",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 5,
-                            color: Colors.black.withOpacity(0.5),
-                            offset: Offset(0, 3),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+
+                      // Doctor AI Card - Chat
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Nhắn tin cùng Gió",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Cùng Gió nhắn tin  chia sẻ và thấu hiểu nhau",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ChatPage()),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "Bắt đầu Chat",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Image.asset(
+                                  'images/robot.png', // Make sure to have this image in your assets
+                                  width: 100,
+                                  height: 120,
+                                  fit: BoxFit.contain,
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: -10,
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.pink,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      "Hi!",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(height: 30),
+
+                      // Voice AI Card - THÊM MỚI
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Trò truyện cùng Gió",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Cùng Gió trao đổi trò chuyện để thấu hiểu nhau",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => VoicePage(cameras: [],)),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "Bắt đầu trò truyện",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Icon(
+                                  Icons.mic,
+                                  size: 80,
+                                  color: Colors.blue,
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: -10,
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      "Talk!",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(height: 30),
+
+                      // Emergency Services
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildEmergencyCard(
+                              "Ambulance",
+                              "123",
+                              Colors.green[100]!,
+                              Icons.local_shipping,
+                              Colors.green,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: _buildEmergencyCard(
+                              "Amergency",
+                              "112",
+                              Colors.blue[100]!,
+                              Icons.local_taxi,
+                              Colors.blue,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: _buildEmergencyCard(
+                              "Firefighting",
+                              "180",
+                              Colors.orange[100]!,
+                              Icons.fire_extinguisher,
+                              Colors.orange,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Text(
-                      "Aweken Your Mind",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 5,
-                            color: Colors.black.withOpacity(0.5),
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+
+                      SizedBox(height: 30), // Giảm khoảng cách để phù hợp với nội dung mới
+                    ],
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: heightSizeBox),
+
+            // Bottom Navigation Bar
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: Offset(0, -1),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNavItem(Icons.chat_bubble_outline, "chat", Colors.green, true),
+                  _buildNavItem(Icons.mic, "voice", Colors.blue, false), // Thêm nút voice ở navigation bar
+                  _buildNavItem(Icons.map_outlined, "map", Colors.grey, false),
+                  _buildNavItem(Icons.person_outline, "account", Colors.grey, false),
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildEmergencyCard(String title, String number, Color bgColor, IconData icon, Color iconColor) {
+    return Container(
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.green, width: 1),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 24,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            number,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, Color color, bool isActive) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          color: color,
+          size: 24,
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: color,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -8,7 +8,7 @@ import Foundation
 import flutter_tts
 import path_provider_foundation
 import speech_to_text_macos
-import sqflite
+import sqflite_darwin
 import url_launcher_macos
 import video_player_avfoundation
 
